@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Proximity Paradox</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="status-header">
+        <div class="status-header__top">
+          <div>
+            <p class="eyebrow">HKU Simulation</p>
+            <h1>The Proximity Paradox</h1>
+          </div>
+          <div class="turn-pill" id="turn-pill">Week 0 / 5</div>
+        </div>
+
+        <div class="meter-grid">
+          <section class="meter-card" id="allyship-card">
+            <div class="meter-card__label-row">
+              <span>Moral Integrity</span>
+              <strong id="allyship-value">50</strong>
+            </div>
+            <div
+              class="meter"
+              role="progressbar"
+              aria-label="Moral Integrity"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-valuenow="50"
+            >
+              <div class="meter__fill meter__fill--allyship" id="allyship-fill"></div>
+            </div>
+          </section>
+
+          <section class="meter-card" id="social-card">
+            <div class="meter-card__label-row">
+              <span>Social Standing</span>
+              <strong id="social-value">50</strong>
+            </div>
+            <div
+              class="meter"
+              role="progressbar"
+              aria-label="Social Standing"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-valuenow="50"
+            >
+              <div class="meter__fill meter__fill--social" id="social-fill"></div>
+            </div>
+          </section>
+        </div>
+      </header>
+
+      <main class="main-layout">
+        <section class="story-panel">
+          <div class="panel-header">
+            <p class="eyebrow">Scenario</p>
+            <p class="microcopy" id="scenario-tag">Semester starting...</p>
+          </div>
+
+          <div class="event-card">
+            <p class="event-card__kicker" id="event-kicker">Welcome</p>
+            <h2 id="event-title">Can you stay principled when it gets socially expensive?</h2>
+            <p class="event-card__body" id="event-description">
+              You are an HKU student entering a new semester. Your choices will shape two things:
+              how much you protect your own comfort, and how much you protect someone else's.
+            </p>
+
+            <div class="choice-list" id="choice-list">
+              <button class="choice-button choice-button--primary" id="start-button" type="button">
+                Start Semester
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <aside class="log-panel">
+          <div class="panel-header">
+            <p class="eyebrow">Impact Log</p>
+            <p class="microcopy">Your decisions leave a trace.</p>
+          </div>
+          <div class="log-window" id="log-window" aria-live="polite"></div>
+        </aside>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
