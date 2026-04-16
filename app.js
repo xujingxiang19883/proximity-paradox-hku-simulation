@@ -436,10 +436,6 @@ async function submitResults() {
     new URLSearchParams(window.location.search).get("endpoint") ||
     "";
 
-  if (!analyticsEndpoint) {
-    return;
-  }
-
   const payload = {
     timestamp: new Date().toISOString(),
     allyship: state.allyship,
