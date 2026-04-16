@@ -31,6 +31,7 @@ body {
 body {
   font-family: "Space Grotesk", sans-serif;
   color: var(--ink);
+  min-height: 100dvh;
   background:
     radial-gradient(circle at top left, rgba(253, 229, 177, 0.95), transparent 28%),
     radial-gradient(circle at bottom right, rgba(199, 222, 169, 0.6), transparent 24%),
@@ -47,12 +48,12 @@ select {
 .app-shell {
   width: min(calc(100% - 24px), var(--max-width));
   margin: 0 auto;
-  padding: 18px 0 32px;
+  padding: calc(env(safe-area-inset-top) + 18px) 0 calc(env(safe-area-inset-bottom) + 32px);
 }
 
 .status-header {
   position: sticky;
-  top: 0;
+  top: max(0px, env(safe-area-inset-top));
   z-index: 10;
   margin-bottom: 18px;
   padding: 18px;
@@ -157,6 +158,7 @@ h2 {
   display: grid;
   grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.9fr);
   gap: 18px;
+  align-items: start;
 }
 
 .story-panel,
@@ -195,6 +197,7 @@ h2 {
 
 .choice-button {
   width: 100%;
+  min-height: 74px;
   padding: 16px 18px;
   border: 0;
   border-radius: var(--radius-md);
@@ -231,6 +234,7 @@ h2 {
   display: block;
   font-weight: 700;
   margin-bottom: 6px;
+  line-height: 1.35;
 }
 
 .choice-button__effect {
@@ -408,6 +412,99 @@ h2 {
   .log-window {
     min-height: 220px;
     max-height: 280px;
+  }
+}
+
+@media (max-width: 560px) {
+  .app-shell {
+    width: min(calc(100% - 12px), var(--max-width));
+    padding-bottom: calc(env(safe-area-inset-bottom) + 18px);
+  }
+
+  .status-header,
+  .event-card,
+  .log-panel {
+    border-radius: 16px;
+  }
+
+  .status-header {
+    margin-bottom: 14px;
+    padding: 12px;
+  }
+
+  .meter-card {
+    padding: 12px;
+  }
+
+  .meter {
+    height: 14px;
+  }
+
+  .turn-pill {
+    width: 100%;
+    text-align: center;
+  }
+
+  .event-card {
+    padding: 14px;
+  }
+
+  .event-card__body {
+    font-size: 0.96rem;
+    line-height: 1.5;
+  }
+
+  .choice-list {
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .choice-button {
+    min-height: 68px;
+    padding: 15px 14px;
+  }
+
+  .choice-button__title {
+    margin-bottom: 0;
+    font-size: 0.98rem;
+  }
+
+  .log-panel {
+    padding: 14px;
+  }
+
+  .log-window {
+    min-height: 180px;
+    max-height: 220px;
+    padding: 12px;
+    font-size: 0.82rem;
+  }
+}
+
+@media (max-height: 760px) {
+  .status-header {
+    position: relative;
+    top: auto;
+  }
+
+  .log-window {
+    max-height: 220px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .app-shell {
+    width: min(calc(100% - 40px), 1220px);
+  }
+
+  .main-layout {
+    grid-template-columns: minmax(0, 1.6fr) minmax(320px, 380px);
+    gap: 22px;
+  }
+
+  .event-card,
+  .log-panel {
+    padding: 24px;
   }
 }
 

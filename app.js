@@ -6,47 +6,43 @@ const startingStats = {
 const turns = [
   {
     week: "Week 1",
-    kicker: "The Charter",
-    title: "HKU circulates an Inclusion Manifesto for student signatures.",
+    kicker: "The First Meeting",
+    title: "You finally meet your lab partner Sam in person.",
     description:
-      "Most people treat it as symbolic. Signing takes seconds, but it also quietly signals what kind of campus you want to belong to.",
+      "You only knew Sam from email before today. At the classroom door, two classmates exchange a look after Sam introduces themself. One mutters, \"Oh, that's the trans student.\" Sam definitely hears it.",
     choices: [
       {
-        label: "Sign the manifesto",
-        effectText: "+8 Moral Integrity, no change to Social Standing",
-        delta: { allyship: 8, social: 0 },
+        label: "Step in, greet Sam normally, and keep the conversation moving",
+        delta: { allyship: 10, social: -2 },
         logText:
-          "You sign. It costs you nothing yet, and you feel consistent with the values you claim in private.",
+          "You cut through the weirdness before it can harden into a scene. Sam settles into the room, and everyone else has to adjust to your cue.",
       },
       {
-        label: "Ignore the form",
-        effectText: "-8 Moral Integrity, no change to Social Standing",
-        delta: { allyship: -8, social: 0 },
+        label: "Pretend you didn't hear it and focus on the worksheet",
+        delta: { allyship: -10, social: 4 },
         logText:
-          "You scroll past it. No one notices, but your support stays theoretical instead of practiced.",
+          "You avoid becoming part of the moment, which also means leaving Sam alone in it. The class moves on more comfortably than Sam does.",
       },
     ],
   },
   {
     week: "Week 3",
-    kicker: "The Reveal",
-    title: "Your lab partner Sam tells you they are transitioning.",
+    kicker: "The Group Chat",
+    title: "A teammate drops Sam's old name into your project group chat.",
     description:
-      "Sam asks you to use their name and not make a scene. Suddenly this is no longer a survey answer. It is a relationship.",
+      "The message lands with a laughing emoji and a screenshot from an old class list. No one responds for a few seconds. You can feel the chat waiting to see what kind of space it will become.",
     choices: [
       {
-        label: "Be openly supportive",
-        effectText: "+12 Moral Integrity, no change to Social Standing",
-        delta: { allyship: 12, social: 0 },
+        label: "Correct it immediately and ask everyone to use Sam's name",
+        delta: { allyship: 14, social: -6 },
         logText:
-          "You respond with warmth and clarity. Sam relaxes, and trust starts to build between you.",
+          "You set a line in plain language. The chat gets a little colder, but Sam no longer has to defend their own right to stay in it.",
       },
       {
-        label: 'Say "let’s just keep it professional"',
-        effectText: "-12 Moral Integrity, +6 Social Standing",
+        label: "Say nothing and wait for the topic to pass",
         delta: { allyship: -12, social: 6 },
         logText:
-          "You protect your own comfort by making the moment smaller than it is. Sam hears the distance immediately.",
+          "Silence keeps the chat easy for everyone except Sam. The deadname lingers on screen because no one with social cover chose to interrupt it.",
       },
     ],
   },
@@ -59,14 +55,12 @@ const turns = [
     choices: [
       {
         label: "Call the joke out",
-        effectText: "+18 Moral Integrity, -16 Social Standing",
         delta: { allyship: 18, social: -16 },
         logText:
           "You interrupt the rhythm of the table. The laughter dies. A few people roll their eyes, but Sam is no longer left alone in the silence.",
       },
       {
         label: "Fake laugh and move on",
-        effectText: "-18 Moral Integrity, +8 Social Standing",
         delta: { allyship: -18, social: 8 },
         logText:
           "You stay socially fluent by treating harm like harmless banter. The group stays relaxed. Sam doesn't.",
@@ -75,24 +69,22 @@ const turns = [
   },
   {
     week: "Week 8",
-    kicker: "The Facility",
-    title: "At the library, Sam hesitates outside the restroom.",
+    kicker: "The Attendance Sheet",
+    title: "A tutor pauses over Sam's name during attendance and asks, \"Which one do you go by now?\"",
     description:
-      "They say they will wait until they get home. You know why. Helping may mean being seen as part of the awkwardness yourself.",
+      "The room goes quiet in the special way classrooms do when everyone wants someone else to manage the discomfort. Sam looks down at the desk instead of answering right away.",
     choices: [
       {
-        label: "Offer to wait outside for Sam",
-        effectText: "+10 Moral Integrity, -8 Social Standing",
-        delta: { allyship: 10, social: -8 },
+        label: "Step in and redirect with Sam's actual name",
+        delta: { allyship: 12, social: -10 },
         logText:
-          "You choose solidarity over efficiency. You miss a few minutes of class, but Sam does not have to navigate the moment alone.",
+          "You interrupt the public examination before it goes further. The tutor looks mildly annoyed, but the room no longer gets to treat Sam like an explanation.",
       },
       {
-        label: "Say you should both hurry back",
-        effectText: "-10 Moral Integrity, +4 Social Standing",
+        label: "Keep your eyes down and let Sam handle it alone",
         delta: { allyship: -10, social: 4 },
         logText:
-          "You treat the tension like a scheduling problem. Nothing dramatic happens, which is exactly how avoidable exclusion survives.",
+          "No one can accuse you of causing a scene, because you didn't. Sam still had to stand there and absorb one in public.",
       },
     ],
   },
@@ -105,14 +97,12 @@ const turns = [
     choices: [
       {
         label: "Defend Sam and keep them on the team",
-        effectText: "+20 Moral Integrity, -18 Social Standing",
         delta: { allyship: 20, social: -18 },
         logText:
           "You force the group to confront what it is actually doing. The room cools toward you, but Sam is no longer disposable.",
       },
       {
         label: "Stay neutral",
-        effectText: "-14 Moral Integrity, +8 Social Standing",
         delta: { allyship: -14, social: 8 },
         logText:
           "You let the decision drift toward convenience. The group appreciates that you did not make things harder for them.",
@@ -233,7 +223,6 @@ function createChoiceButton(choice, turn) {
   button.type = "button";
   button.innerHTML = `
     <span class="choice-button__title">${choice.label}</span>
-    <span class="choice-button__effect">${choice.effectText}</span>
   `;
 
   button.addEventListener("click", () => {
@@ -348,7 +337,7 @@ function renderIntro() {
   elements.eventKicker.textContent = "Welcome";
   elements.eventTitle.textContent = "Can you stay principled when it gets socially expensive?";
   elements.eventDescription.textContent =
-    "You play as an HKU student. In a few weeks, your project partner Sam will trust you with something personal. Your choices will show whether your acceptance survives public inconvenience, awkwardness, and peer pressure.";
+    "You play as an HKU student. Over one semester, your closeness to Sam turns abstract acceptance into public social risk. The question is not what you believe in theory. It is what you do when other people are watching.";
   elements.choiceList.innerHTML = `
     <button class="choice-button choice-button--primary" id="start-button" type="button">
       Start Semester
