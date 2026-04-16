@@ -1,4 +1,4 @@
-import { firebaseReady, subscribeToSummary } from "./firebase-client.js";
+import { appsScriptReady, fetchSummaryJsonp } from "./apps-script-client.js";
 
 const personas = [
   {
@@ -96,19 +96,24 @@ function renderSummary(summary) {
   renderBoard(entries, totalValue);
 }
 
-if (!firebaseReady) {
+if (!appsScriptReady) {
   renderSummary({});
-  lastUpdatedEl.textContent = "Firebase not configured";
+  lastUpdatedEl.textContent = "Apps Script not configured";
   totalCountEl.textContent = "0";
 } else {
-  subscribeToSummary(
-    (summary) => {
-      renderSummary(summary);
-    },
-    () => {
-      renderSummary({});
-      lastUpdatedEl.textContent = "Database unavailable";
-      totalCountEl.textContent = "0";
-    },
-  );
+  function refreshSummary() {
+    fetchSummaryJsonp(
+      (summary) => {
+        renderSummary(summary);
+      },
+      () => {
+        renderSummary({});
+        lastUpdatedEl.textContent = "Backend unavailable";
+        totalCountEl.textContent = "0";
+      },
+    );
+  }
+
+  refreshSummary();
+  window.setInterval(refreshSummary, 10000);
 }

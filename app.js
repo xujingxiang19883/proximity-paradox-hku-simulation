@@ -1,4 +1,4 @@
-import { firebaseReady, recordPlaythrough } from "./firebase-client.js";
+import { appsScriptReady, recordPlaythrough } from "./apps-script-client.js";
 
 const startingStats = {
   allyship: 50,
@@ -444,14 +444,14 @@ async function submitResults() {
   };
 
   try {
-    if (firebaseReady) {
-      await recordPlaythrough(payload);
+    if (appsScriptReady) {
+      recordPlaythrough(payload);
       addLog("Your result was added to the live mascot board.", "System");
     } else {
-      addLog("Firebase is not configured yet, so this run was not stored online.", "System");
+      addLog("Apps Script is not configured yet, so this run was not stored online.", "System");
     }
   } catch (error) {
-    console.error("Firebase submission failed", error);
+    console.error("Apps Script submission failed", error);
     addLog("The live results backend could not store this run.", "System");
   }
 
