@@ -3,6 +3,9 @@ const startingStats = {
   social: 50,
 };
 
+const COUNT_NAMESPACE = "xujingxiang19883.proximity.paradox";
+const COUNT_BASE_URL = "https://api.countapi.xyz";
+
 const turns = [
   {
     week: "Week 1",
@@ -426,6 +429,7 @@ async function submitResults() {
   }
 
   state.submitted = true;
+  const persona = getPersona(state.allyship, state.social);
 
   const analyticsEndpoint =
     window.SIM_CONFIG?.analyticsEndpoint ||
@@ -440,20 +444,33 @@ async function submitResults() {
     timestamp: new Date().toISOString(),
     allyship: state.allyship,
     social: state.social,
-    persona: getPersona(state.allyship, state.social).id,
+    persona: persona.id,
     turns: turns.length,
   };
 
+  const counterRequests = [
+    fetch(`${COUNT_BASE_URL}/hit/${COUNT_NAMESPACE}/total`, { keepalive: true }),
+    fetch(`${COUNT_BASE_URL}/hit/${COUNT_NAMESPACE}/${persona.id}`, { keepalive: true }),
+  ];
+
   try {
-    await fetch(analyticsEndpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-      keepalive: true,
-    });
-    addLog("A final score snapshot was sent to the shared results endpoint.", "System");
+    await Promise.all(counterRequests);
+  } catch (error) {
+    console.error("CountAPI submission failed", error);
+  }
+
+  try {
+    if (analyticsEndpoint) {
+      await fetch(analyticsEndpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+        keepalive: true,
+      });
+      addLog("A final score snapshot was sent to the shared results endpoint.", "System");
+    }
   } catch (error) {
     console.error("Analytics submission failed", error);
     addLog("The score submission hook was configured, but the endpoint could not be reached.", "System");

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Proximity Paradox Live Results</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="results.css" />
+  </head>
+  <body>
+    <main class="results-shell">
+      <section class="hero-card">
+        <p class="eyebrow">Live Result Board</p>
+        <h1>Which mascot are people becoming?</h1>
+        <p class="hero-copy">
+          Every finished playthrough adds one result to this board. The page refreshes itself and shows
+          how the semester is classifying people in real time.
+        </p>
+        <div class="hero-stats">
+          <article class="hero-stat">
+            <span>Total Finished Runs</span>
+            <strong id="total-count">0</strong>
+          </article>
+          <article class="hero-stat">
+            <span>Last Refresh</span>
+            <strong id="last-updated">Waiting...</strong>
+          </article>
+        </div>
+        <a class="hero-link" href="./index.html">Back to the simulator</a>
+      </section>
+
+      <section class="board-section">
+        <div class="board-header">
+          <p class="eyebrow">Mascot Board</p>
+          <p class="board-note">Counts update automatically every 10 seconds.</p>
+        </div>
+        <div class="mascot-grid" id="mascot-grid"></div>
+      </section>
+    </main>
+
+    <script src="results.js"></script>
+  </body>
+</html>
