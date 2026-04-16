@@ -1,6 +1,4 @@
-const COUNT_NAMESPACE = "xujingxiang19883.proximity.paradox";
-const COUNT_BASE_URL = "https://api.countapi.xyz/get";
-const REFRESH_MS = 10000;
+import { firebaseReady, subscribeToSummary } from "./firebase-client.js";
 
 const personas = [
   {
@@ -49,33 +47,12 @@ const totalCountEl = document.getElementById("total-count");
 const lastUpdatedEl = document.getElementById("last-updated");
 const mascotGridEl = document.getElementById("mascot-grid");
 
-function countUrl(key) {
-  return `${COUNT_BASE_URL}/${COUNT_NAMESPACE}/${key}`;
-}
-
 function formatTime(date) {
   return new Intl.DateTimeFormat(undefined, {
     hour: "numeric",
     minute: "2-digit",
     second: "2-digit",
   }).format(date);
-}
-
-async function fetchCounterValue(key) {
-  try {
-    const response = await fetch(countUrl(key), {
-      cache: "no-store",
-    });
-
-    if (!response.ok) {
-      return 0;
-    }
-
-    const data = await response.json();
-    return Number(data.value || 0);
-  } catch (error) {
-    return null;
-  }
 }
 
 function renderBoard(entries, totalValue) {
@@ -107,28 +84,31 @@ function renderBoard(entries, totalValue) {
   lastUpdatedEl.textContent = formatTime(new Date());
 }
 
-async function fetchCounts() {
-  const [totalValueRaw, ...personaValues] = await Promise.all([
-    fetchCounterValue("total"),
-    ...personas.map((persona) => fetchCounterValue(persona.id)),
-  ]);
-
-  const totalValue = totalValueRaw ?? 0;
+function renderSummary(summary) {
+  const totalValue = Number(summary.totalRuns || 0);
+  const personaCounts = summary.personas || {};
   const entries = personas.map((persona, index) => ({
     ...persona,
-    value: Number(personaValues[index] || 0),
+    value: Number(personaCounts[persona.id] || 0),
   }));
 
   entries.sort((a, b) => b.value - a.value || a.title.localeCompare(b.title));
   renderBoard(entries, totalValue);
-
-  if (totalValueRaw === null) {
-    lastUpdatedEl.textContent = "Counter offline";
-  }
 }
 
-fetchCounts();
-
-window.setInterval(() => {
-  fetchCounts();
-}, REFRESH_MS);
+if (!firebaseReady) {
+  renderSummary({});
+  lastUpdatedEl.textContent = "Firebase not configured";
+  totalCountEl.textContent = "0";
+} else {
+  subscribeToSummary(
+    (summary) => {
+      renderSummary(summary);
+    },
+    () => {
+      renderSummary({});
+      lastUpdatedEl.textContent = "Database unavailable";
+      totalCountEl.textContent = "0";
+    },
+  );
+}

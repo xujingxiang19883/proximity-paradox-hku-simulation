@@ -1,10 +1,9 @@
+import { firebaseReady, recordPlaythrough } from "./firebase-client.js";
+
 const startingStats = {
   allyship: 50,
   social: 50,
 };
-
-const COUNT_NAMESPACE = "xujingxiang19883.proximity.paradox";
-const COUNT_BASE_URL = "https://api.countapi.xyz";
 
 const turns = [
   {
@@ -444,20 +443,17 @@ async function submitResults() {
     turns: turns.length,
   };
 
-  const counterRequests = [
-    fetch(`${COUNT_BASE_URL}/hit/${COUNT_NAMESPACE}/total`, {
-      mode: "no-cors",
-      cache: "no-store",
-      keepalive: true,
-    }),
-    fetch(`${COUNT_BASE_URL}/hit/${COUNT_NAMESPACE}/${persona.id}`, {
-      mode: "no-cors",
-      cache: "no-store",
-      keepalive: true,
-    }),
-  ];
-
-  await Promise.allSettled(counterRequests);
+  try {
+    if (firebaseReady) {
+      await recordPlaythrough(payload);
+      addLog("Your result was added to the live mascot board.", "System");
+    } else {
+      addLog("Firebase is not configured yet, so this run was not stored online.", "System");
+    }
+  } catch (error) {
+    console.error("Firebase submission failed", error);
+    addLog("The live results backend could not store this run.", "System");
+  }
 
   try {
     if (analyticsEndpoint) {
