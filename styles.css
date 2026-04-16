@@ -322,6 +322,26 @@ h2 {
   margin-top: 8px;
 }
 
+.result-code {
+  display: inline-flex;
+  margin-bottom: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #eadfbf;
+  color: #5a4630;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.result-tagline {
+  margin-top: 8px;
+  color: #6a5640;
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
 .result-mascot {
   width: 132px;
   height: 132px;

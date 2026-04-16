@@ -114,44 +114,52 @@ const turns = [
 const personaRules = [
   {
     id: "bridge-builder",
-    title: "The Tightrope Fox",
+    title: "The Vibe Juggler",
+    code: "VIBE",
     mascot: {
-      src: "assets/mascot-tightrope-fox.svg",
-      alt: "Fox mascot balancing on a rope",
+      src: "assets/mascot-vibe-juggler.svg",
+      alt: "Playful student ID card mascot juggling two glowing circles",
     },
+    tagline: "Keeping the peace, keeping the principle, somehow keeping both in the air.",
     description:
-      "You tried to protect both principle and belonging at the same time. The result feels balanced, but only because you kept walking a very narrow social rope.",
+      "You tried to protect both principle and belonging at the same time. It worked, but only because you kept performing a careful social balancing act.",
     test: (allyship, social) => allyship >= 60 && social >= 45,
   },
   {
     id: "isolated-ally",
-    title: "The Lantern Badger",
+    title: "The Umbrella Friend",
+    code: "SHLD",
     mascot: {
-      src: "assets/mascot-lantern-badger.svg",
-      alt: "Badger mascot holding a lantern",
+      src: "assets/mascot-umbrella-friend.svg",
+      alt: "Playful umbrella mascot sheltering a small spark",
     },
+    tagline: "When the room got cold, you chose to stand in the weather.",
     description:
-      "You showed up for Sam when it mattered, even when the room pushed back. The social cost was real, but you still carried some light into it.",
+      "You showed up for Sam when it mattered, even when the room pushed back. The social cost was real, but you still took some of the hit.",
     test: (allyship, social) => allyship >= 70 && social < 45,
   },
   {
     id: "bystander",
-    title: "The Nodding Crane",
+    title: "The Room-Reader",
+    code: "EASY",
     mascot: {
-      src: "assets/mascot-nodding-crane.svg",
-      alt: "Crane mascot bowing politely",
+      src: "assets/mascot-room-reader.svg",
+      alt: "Playful smiling theater mask mascot",
     },
+    tagline: "You understood the vibe instantly and let the vibe make the decision.",
     description:
       "You kept the room smooth and yourself comfortable. In practice, that meant letting other people decide what counted as normal.",
     test: (allyship, social) => social >= 55 && allyship < 35,
   },
   {
     id: "frayed-kite",
-    title: "The Frayed Kite",
+    title: "The Draft Reply",
+    code: "UMMM",
     mascot: {
-      src: "assets/mascot-frayed-kite.svg",
-      alt: "Kite mascot buffeted by strong wind",
+      src: "assets/mascot-draft-reply.svg",
+      alt: "Playful chat bubble mascot with an eraser and blinking cursor",
     },
+    tagline: "You wanted to say the right thing. The room moved faster than your courage.",
     description:
       "You did push back, but not without hesitation. You absorbed social damage while still being pulled around by the room.",
     test: (allyship, social) => allyship >= 45 && social < 30,
@@ -260,6 +268,7 @@ function createChoiceButton(choice, choiceIndex) {
 
 function renderTurn() {
   const turn = turns[state.currentTurn];
+  elements.eventTitle.hidden = false;
   elements.turnPill.textContent = `${turn.week} / ${turns.length}`;
   elements.scenarioTag.textContent = `Turn ${state.currentTurn + 1} of ${turns.length}`;
   elements.eventKicker.textContent = turn.kicker;
@@ -276,11 +285,13 @@ function getPersona(allyship, social) {
   return (
     personaRules.find((rule) => rule.test(allyship, social)) || {
       id: "proximity-paradox",
-      title: "The Fog Moth",
+      title: "The Loading Wheel",
+      code: "HMMM",
       mascot: {
-        src: "assets/mascot-fog-moth.svg",
-        alt: "Moth mascot floating in a foggy glow",
+        src: "assets/mascot-loading-wheel.svg",
+        alt: "Playful loading spinner mascot glowing softly",
       },
+      tagline: "Thinking... hesitating... still buffering between comfort and conviction.",
       description:
         "You landed in the messy middle. That is the point. Once allyship becomes public and relational, clarity gets harder and compromise gets easier.",
     }
@@ -300,7 +311,9 @@ function buildResultMarkup() {
       <div class="result-hero">
         <img class="result-mascot" src="${persona.mascot.src}" alt="${persona.mascot.alt}" />
         <div class="result-hero__copy">
+          <span class="result-code">${persona.code}</span>
           <h2>${persona.title}</h2>
+          <p class="result-tagline">${persona.tagline}</p>
           <p class="event-card__body">${persona.description}</p>
         </div>
       </div>
@@ -326,7 +339,8 @@ function renderEnding() {
   elements.turnPill.textContent = "Semester Complete";
   elements.scenarioTag.textContent = "Final reflection";
   elements.eventKicker.textContent = "End of Semester";
-  elements.eventTitle.textContent = "You cannot max out both bars for long.";
+  elements.eventTitle.hidden = true;
+  elements.eventTitle.textContent = "";
   elements.eventDescription.innerHTML =
     "The semester ends with one question: <strong>what happened when support became socially costly?</strong>";
   elements.choiceList.innerHTML = `
@@ -354,6 +368,7 @@ function resetGame() {
 }
 
 function renderIntro() {
+  elements.eventTitle.hidden = false;
   elements.turnPill.textContent = "Week 0 / 5";
   elements.scenarioTag.textContent = "Semester starting...";
   elements.eventKicker.textContent = "Welcome";
