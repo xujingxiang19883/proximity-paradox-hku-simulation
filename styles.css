@@ -311,6 +311,26 @@ h2 {
   font-size: 0.8rem;
 }
 
+.result-hero {
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+}
+
+.result-hero__copy .event-card__body {
+  margin-top: 8px;
+}
+
+.result-mascot {
+  width: 132px;
+  height: 132px;
+  object-fit: contain;
+  border-radius: 20px;
+  border: 1px solid rgba(76, 56, 32, 0.08);
+  background: linear-gradient(180deg, rgba(255, 250, 240, 0.95), rgba(242, 232, 208, 0.95));
+}
+
 .result-scores {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -397,8 +417,14 @@ h2 {
 
   .meter-grid,
   .main-layout,
-  .result-scores {
+  .result-scores,
+  .result-hero {
     grid-template-columns: 1fr;
+  }
+
+  .result-mascot {
+    width: 124px;
+    height: 124px;
   }
 
   .event-card,

@@ -114,31 +114,47 @@ const turns = [
 const personaRules = [
   {
     id: "bridge-builder",
-    title: "The Careful Bridge-Builder",
+    title: "The Tightrope Fox",
+    mascot: {
+      src: "assets/mascot-tightrope-fox.svg",
+      alt: "Fox mascot balancing on a rope",
+    },
     description:
-      "You tried to preserve both principle and belonging. The simulator still pushed you toward compromise, showing how fragile performative acceptance becomes under pressure.",
+      "You tried to protect both principle and belonging at the same time. The result feels balanced, but only because you kept walking a very narrow social rope.",
     test: (allyship, social) => allyship >= 60 && social >= 45,
   },
   {
-    id: "keyboard-warrior",
-    title: "The Keyboard Warrior",
+    id: "isolated-ally",
+    title: "The Lantern Badger",
+    mascot: {
+      src: "assets/mascot-lantern-badger.svg",
+      alt: "Badger mascot holding a lantern",
+    },
     description:
-      "You believe in inclusion when it stays abstract, but your support faltered when the cost became public, social, and immediate.",
-    test: (allyship, social) => allyship >= 45 && social < 30,
+      "You showed up for Sam when it mattered, even when the room pushed back. The social cost was real, but you still carried some light into it.",
+    test: (allyship, social) => allyship >= 70 && social < 45,
   },
   {
     id: "bystander",
-    title: "The Bystander",
+    title: "The Nodding Crane",
+    mascot: {
+      src: "assets/mascot-nodding-crane.svg",
+      alt: "Crane mascot bowing politely",
+    },
     description:
-      "You protected your own ease and group comfort, even when the harm was visible. Social smoothness won over solidarity.",
+      "You kept the room smooth and yourself comfortable. In practice, that meant letting other people decide what counted as normal.",
     test: (allyship, social) => social >= 55 && allyship < 35,
   },
   {
-    id: "isolated-ally",
-    title: "The Socially Costly Ally",
+    id: "frayed-kite",
+    title: "The Frayed Kite",
+    mascot: {
+      src: "assets/mascot-frayed-kite.svg",
+      alt: "Kite mascot buffeted by strong wind",
+    },
     description:
-      "You showed up for Sam when it mattered, and the social penalties were real. The game's point is that the cost should not be this high.",
-    test: (allyship, social) => allyship >= 70 && social < 45,
+      "You did push back, but not without hesitation. You absorbed social damage while still being pulled around by the room.",
+    test: (allyship, social) => allyship >= 45 && social < 30,
   },
 ];
 
@@ -260,9 +276,13 @@ function getPersona(allyship, social) {
   return (
     personaRules.find((rule) => rule.test(allyship, social)) || {
       id: "proximity-paradox",
-      title: "The Proximity Paradox",
+      title: "The Fog Moth",
+      mascot: {
+        src: "assets/mascot-fog-moth.svg",
+        alt: "Moth mascot floating in a foggy glow",
+      },
       description:
-        "You ended in the messy middle. That is the point. On a campus governed by binary norms, keeping both scores high is structurally difficult once allyship becomes public and relational.",
+        "You landed in the messy middle. That is the point. Once allyship becomes public and relational, clarity gets harder and compromise gets easier.",
     }
   );
 }
@@ -277,9 +297,12 @@ function buildResultMarkup() {
   return `
     <div class="result-block">
       <span class="result-tag">Result Persona</span>
-      <div>
-        <h2>${persona.title}</h2>
-        <p class="event-card__body">${persona.description}</p>
+      <div class="result-hero">
+        <img class="result-mascot" src="${persona.mascot.src}" alt="${persona.mascot.alt}" />
+        <div class="result-hero__copy">
+          <h2>${persona.title}</h2>
+          <p class="event-card__body">${persona.description}</p>
+        </div>
       </div>
       <div class="result-scores">
         <div class="result-score-card">
