@@ -61,6 +61,23 @@ function formatTime(date) {
   }).format(date);
 }
 
+async function fetchCounterValue(key) {
+  try {
+    const response = await fetch(countUrl(key), {
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      return 0;
+    }
+
+    const data = await response.json();
+    return Number(data.value || 0);
+  } catch (error) {
+    return null;
+  }
+}
+
 function renderBoard(entries, totalValue) {
   const highest = Math.max(...entries.map((entry) => entry.value), 0);
 
@@ -91,32 +108,27 @@ function renderBoard(entries, totalValue) {
 }
 
 async function fetchCounts() {
-  const requests = [
-    fetch(countUrl("total")).then((response) => response.json()),
-    ...personas.map((persona) =>
-      fetch(countUrl(persona.id))
-        .then((response) => response.json())
-        .catch(() => ({ value: 0 })),
-    ),
-  ];
+  const [totalValueRaw, ...personaValues] = await Promise.all([
+    fetchCounterValue("total"),
+    ...personas.map((persona) => fetchCounterValue(persona.id)),
+  ]);
 
-  const [totalResponse, ...personaResponses] = await Promise.all(requests);
-  const totalValue = Number(totalResponse.value || 0);
+  const totalValue = totalValueRaw ?? 0;
   const entries = personas.map((persona, index) => ({
     ...persona,
-    value: Number(personaResponses[index]?.value || 0),
+    value: Number(personaValues[index] || 0),
   }));
 
   entries.sort((a, b) => b.value - a.value || a.title.localeCompare(b.title));
   renderBoard(entries, totalValue);
+
+  if (totalValueRaw === null) {
+    lastUpdatedEl.textContent = "Counter offline";
+  }
 }
 
-fetchCounts().catch(() => {
-  lastUpdatedEl.textContent = "Could not load";
-});
+fetchCounts();
 
 window.setInterval(() => {
-  fetchCounts().catch(() => {
-    lastUpdatedEl.textContent = "Retrying...";
-  });
+  fetchCounts();
 }, REFRESH_MS);

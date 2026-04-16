@@ -445,15 +445,19 @@ async function submitResults() {
   };
 
   const counterRequests = [
-    fetch(`${COUNT_BASE_URL}/hit/${COUNT_NAMESPACE}/total`, { keepalive: true }),
-    fetch(`${COUNT_BASE_URL}/hit/${COUNT_NAMESPACE}/${persona.id}`, { keepalive: true }),
+    fetch(`${COUNT_BASE_URL}/hit/${COUNT_NAMESPACE}/total`, {
+      mode: "no-cors",
+      cache: "no-store",
+      keepalive: true,
+    }),
+    fetch(`${COUNT_BASE_URL}/hit/${COUNT_NAMESPACE}/${persona.id}`, {
+      mode: "no-cors",
+      cache: "no-store",
+      keepalive: true,
+    }),
   ];
 
-  try {
-    await Promise.all(counterRequests);
-  } catch (error) {
-    console.error("CountAPI submission failed", error);
-  }
+  await Promise.allSettled(counterRequests);
 
   try {
     if (analyticsEndpoint) {
