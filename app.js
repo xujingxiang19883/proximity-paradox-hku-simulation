@@ -155,7 +155,6 @@ const elements = {
   eventTitle: document.getElementById("event-title"),
   eventDescription: document.getElementById("event-description"),
   choiceList: document.getElementById("choice-list"),
-  startButton: document.getElementById("start-button"),
   logWindow: document.getElementById("log-window"),
 };
 
@@ -217,26 +216,28 @@ function updateStats(delta) {
   }
 }
 
-function createChoiceButton(choice, turn) {
+function advanceFromChoice(choice, turn) {
+  updateStats(choice.delta);
+  addLog(choice.logText, turn.week);
+
+  if (state.currentTurn >= turns.length - 1) {
+    renderEnding();
+    return;
+  }
+
+  state.currentTurn += 1;
+  renderTurn();
+}
+
+function createChoiceButton(choice, choiceIndex) {
   const button = document.createElement("button");
   button.className = "choice-button";
   button.type = "button";
+  button.dataset.action = "choice";
+  button.dataset.choiceIndex = String(choiceIndex);
   button.innerHTML = `
     <span class="choice-button__title">${choice.label}</span>
   `;
-
-  button.addEventListener("click", () => {
-    updateStats(choice.delta);
-    addLog(choice.logText, turn.week);
-
-    if (state.currentTurn >= turns.length - 1) {
-      renderEnding();
-      return;
-    }
-
-    state.currentTurn += 1;
-    renderTurn();
-  });
 
   return button;
 }
@@ -250,8 +251,8 @@ function renderTurn() {
   elements.eventDescription.innerHTML = turn.description;
   elements.choiceList.innerHTML = "";
 
-  turn.choices.forEach((choice) => {
-    elements.choiceList.appendChild(createChoiceButton(choice, turn));
+  turn.choices.forEach((choice, choiceIndex) => {
+    elements.choiceList.appendChild(createChoiceButton(choice, choiceIndex));
   });
 }
 
@@ -307,7 +308,7 @@ function renderEnding() {
     "The semester ends with one question: <strong>what happened when support became socially costly?</strong>";
   elements.choiceList.innerHTML = `
     ${buildResultMarkup()}
-    <button class="choice-button choice-button--primary" id="restart-button" type="button">
+    <button class="choice-button choice-button--primary" data-action="restart" type="button">
       Play Again
     </button>
   `;
@@ -317,8 +318,6 @@ function renderEnding() {
     "Final",
   );
   submitResults();
-
-  document.getElementById("restart-button").addEventListener("click", resetGame);
 }
 
 function resetGame() {
@@ -339,20 +338,49 @@ function renderIntro() {
   elements.eventDescription.innerHTML =
     "You play as an HKU student. Over one semester, your closeness to Sam turns <strong>abstract acceptance</strong> into <strong>public social risk</strong>. The question is not what you believe in theory. It is what you do when other people are watching.";
   elements.choiceList.innerHTML = `
-    <button class="choice-button choice-button--primary" id="start-button" type="button">
+    <button class="choice-button choice-button--primary" data-action="start" type="button">
       Start Semester
     </button>
   `;
-
-  elements.choiceList.querySelector("#start-button").addEventListener("click", () => {
-    state.currentTurn = 0;
-    addLog(
-      "Semester begins. Both of your bars start balanced, but upcoming decisions will pull them apart.",
-      "Week 0",
-    );
-    renderTurn();
-  });
 }
+
+function startGame() {
+  state.currentTurn = 0;
+  addLog(
+    "Semester begins. Both of your bars start balanced, but upcoming decisions will pull them apart.",
+    "Week 0",
+  );
+  renderTurn();
+}
+
+elements.choiceList.addEventListener("click", (event) => {
+  const button = event.target.closest("button[data-action]");
+
+  if (!button) {
+    return;
+  }
+
+  const { action } = button.dataset;
+
+  if (action === "start") {
+    startGame();
+    return;
+  }
+
+  if (action === "restart") {
+    resetGame();
+    return;
+  }
+
+  if (action === "choice") {
+    const turn = turns[state.currentTurn];
+    const choice = turn?.choices[Number(button.dataset.choiceIndex)];
+
+    if (choice && turn) {
+      advanceFromChoice(choice, turn);
+    }
+  }
+});
 
 async function submitResults() {
   if (state.submitted) {

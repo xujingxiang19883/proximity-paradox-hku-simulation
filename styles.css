@@ -209,6 +209,8 @@ h2 {
   border-radius: var(--radius-md);
   text-align: left;
   color: var(--ink);
+  cursor: pointer;
+  touch-action: manipulation;
   background: #fffaf0;
   box-shadow: 0 12px 28px rgba(89, 63, 31, 0.08);
   transition:
