@@ -8,12 +8,8 @@ const turns = [
     week: "Week 1",
     kicker: "The First Meeting",
     title: "You finally meet your lab partner Sam in person.",
-    image: {
-      src: "assets/scene-first-meeting.svg",
-      alt: "Stylized classroom doorway scene showing a first in-person meeting with Sam",
-    },
     description:
-      "You only knew Sam from email before today. At the classroom door, two classmates exchange a look after Sam introduces themself. One mutters, \"Oh, that's the trans student.\" Sam definitely hears it.",
+      "You only knew Sam from email. At the classroom door, a classmate mutters, <strong>\"Oh, that's the trans student.\"</strong> Sam hears it.",
     choices: [
       {
         label: "Step in, greet Sam normally, and keep the conversation moving",
@@ -33,12 +29,8 @@ const turns = [
     week: "Week 3",
     kicker: "The Group Chat",
     title: "A teammate drops Sam's old name into your project group chat.",
-    image: {
-      src: "assets/scene-group-chat.svg",
-      alt: "Stylized phone chat interface showing a tense group chat moment",
-    },
     description:
-      "The message lands with a laughing emoji and a screenshot from an old class list. No one responds for a few seconds. You can feel the chat waiting to see what kind of space it will become.",
+      "A teammate posts Sam's old name with a laughing emoji and an old class list. The chat goes quiet. <strong>Everyone is waiting</strong> to see whether anyone will step in.",
     choices: [
       {
         label: "Correct it immediately and ask everyone to use Sam's name",
@@ -58,12 +50,8 @@ const turns = [
     week: "Week 5",
     kicker: "The Canteen",
     title: "Your friend group jokes about Sam's appearance over lunch.",
-    image: {
-      src: "assets/scene-canteen.svg",
-      alt: "Stylized campus canteen table scene with students sitting around lunch",
-    },
     description:
-      "The table laughs because everyone recognizes the script. The moment passes quickly if you let it. It gets awkward if you don't.",
+      "The whole table laughs. If you stay quiet, the moment passes quickly. If you speak up, <strong>the mood changes immediately</strong>.",
     choices: [
       {
         label: "Call the joke out",
@@ -83,12 +71,8 @@ const turns = [
     week: "Week 8",
     kicker: "The Attendance Sheet",
     title: "A tutor pauses over Sam's name during attendance and asks, \"Which one do you go by now?\"",
-    image: {
-      src: "assets/scene-attendance.svg",
-      alt: "Stylized classroom scene with a tutor, an attendance sheet, and students at desks",
-    },
     description:
-      "The room goes quiet in the special way classrooms do when everyone wants someone else to manage the discomfort. Sam looks down at the desk instead of answering right away.",
+      "The room goes quiet. Sam looks down at the desk. <strong>No one wants to be the first person</strong> to interrupt the awkwardness.",
     choices: [
       {
         label: "Step in and redirect with Sam's actual name",
@@ -108,12 +92,8 @@ const turns = [
     week: "Week 11",
     kicker: "The Project",
     title: 'A teammate suggests dropping Sam because "it makes meetings awkward."',
-    image: {
-      src: "assets/scene-project.svg",
-      alt: "Stylized group project meeting scene around a table",
-    },
     description:
-      "Nobody says the quiet part out loud, but everyone understands it. If you push back, the group dynamic may turn on you next.",
+      "No one says the quiet part out loud, but everyone understands it. If you defend Sam, <strong>you may become the next problem</strong> in the room.",
     choices: [
       {
         label: "Defend Sam and keep them on the team",
@@ -174,7 +154,6 @@ const elements = {
   eventKicker: document.getElementById("event-kicker"),
   eventTitle: document.getElementById("event-title"),
   eventDescription: document.getElementById("event-description"),
-  eventImage: document.getElementById("event-image"),
   choiceList: document.getElementById("choice-list"),
   startButton: document.getElementById("start-button"),
   logWindow: document.getElementById("log-window"),
@@ -268,9 +247,7 @@ function renderTurn() {
   elements.scenarioTag.textContent = `Turn ${state.currentTurn + 1} of ${turns.length}`;
   elements.eventKicker.textContent = turn.kicker;
   elements.eventTitle.textContent = turn.title;
-  elements.eventDescription.textContent = turn.description;
-  elements.eventImage.src = turn.image.src;
-  elements.eventImage.alt = turn.image.alt;
+  elements.eventDescription.innerHTML = turn.description;
   elements.choiceList.innerHTML = "";
 
   turn.choices.forEach((choice) => {
@@ -326,10 +303,8 @@ function renderEnding() {
   elements.scenarioTag.textContent = "Final reflection";
   elements.eventKicker.textContent = "End of Semester";
   elements.eventTitle.textContent = "You cannot max out both bars for long.";
-  elements.eventImage.src = "assets/scene-intro.svg";
-  elements.eventImage.alt = "Stylized HKU social simulation summary scene";
-  elements.eventDescription.textContent =
-    "The semester ends with a simple question: what happened when inclusion stopped being abstract and started costing you something in front of other people?";
+  elements.eventDescription.innerHTML =
+    "The semester ends with one question: <strong>what happened when support became socially costly?</strong>";
   elements.choiceList.innerHTML = `
     ${buildResultMarkup()}
     <button class="choice-button choice-button--primary" id="restart-button" type="button">
@@ -361,10 +336,8 @@ function renderIntro() {
   elements.scenarioTag.textContent = "Semester starting...";
   elements.eventKicker.textContent = "Welcome";
   elements.eventTitle.textContent = "Can you stay principled when it gets socially expensive?";
-  elements.eventImage.src = "assets/scene-intro.svg";
-  elements.eventImage.alt = "Stylized HKU campus social simulation scene";
-  elements.eventDescription.textContent =
-    "You play as an HKU student. Over one semester, your closeness to Sam turns abstract acceptance into public social risk. The question is not what you believe in theory. It is what you do when other people are watching.";
+  elements.eventDescription.innerHTML =
+    "You play as an HKU student. Over one semester, your closeness to Sam turns <strong>abstract acceptance</strong> into <strong>public social risk</strong>. The question is not what you believe in theory. It is what you do when other people are watching.";
   elements.choiceList.innerHTML = `
     <button class="choice-button choice-button--primary" id="start-button" type="button">
       Start Semester
